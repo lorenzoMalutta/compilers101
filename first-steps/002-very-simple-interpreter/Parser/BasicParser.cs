@@ -122,7 +122,7 @@ namespace VerySimpleInterpreter.Parser
             }
             else if (!TestFollow(ETokenType.CE, ETokenType.EOL))
             {
-                Error("Found "+ _lookAhead.Type.ToString() +" certo");
+                Error("Found "+ _lookAhead.Type.ToString() +" ERRO");
             }
             return left;
         }

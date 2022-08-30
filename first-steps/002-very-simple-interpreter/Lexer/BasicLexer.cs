@@ -75,7 +75,24 @@ namespace VerySimpleInterpreter.Lexer
                 if (_peek == 'r')  //'read'
                 {
                     if (testSufix("ead"))
-                        return new Token(ETokenType.INPUT);
+                        if (NextChar() == ' ')
+                        {
+                            if (NextChar() == '$')
+                            {
+                                var varName = " ";
+
+                                do
+                                {
+                                    _peek = NextChar();
+                                    if (Char.IsLetter(_peek.Value))
+                                        varName += _peek;
+                                } while (Char.IsLetter(_peek.Value));
+
+                                var x = Console.ReadLine();
+                                var k = SymbolTable.Put(varName, int.Parse(x));
+                            }
+                        }
+                    return new Token(ETokenType.INPUT);
                 }
 
                 if (_peek == 'w')  //'write'
