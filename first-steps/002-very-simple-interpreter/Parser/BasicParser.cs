@@ -49,7 +49,15 @@ namespace VerySimpleInterpreter.Parser
         public void Line() // line   : stmt EOL
         {
             Stmt();
-            Match(ETokenType.EOL);
+            if(_lookAhead.Type == ETokenType.EOF)
+            {
+                Match(ETokenType.EOF);
+            }
+            else
+            {
+                Match(ETokenType.EOL);
+            }
+            
         }
 
         public void Stmt() //stmt   : in | out | atrib  
@@ -60,12 +68,14 @@ namespace VerySimpleInterpreter.Parser
                 Output();
             else if (_lookAhead.Type == ETokenType.VAR)
                 Atrib();
+            else if (_lookAhead.Type == ETokenType.EOF)
+                Console.WriteLine("ERRO");
             else
                 Error("Expected INPUT, OUTPUT or VAR");
         }
 
         public void Input() // in     : INPUT VAR
-        {
+        {   
             Match(ETokenType.INPUT);
             Match(ETokenType.VAR);
         }
@@ -73,6 +83,7 @@ namespace VerySimpleInterpreter.Parser
         public void Output() // out    : OUTPUT VAR
         {
             Match(ETokenType.OUTPUT);
+            Console.WriteLine(_symbolTable.Get(_lookAhead.Value.Value));        
             Match(ETokenType.VAR);
         }
 
@@ -111,11 +122,10 @@ namespace VerySimpleInterpreter.Parser
             }
             else if (!TestFollow(ETokenType.CE, ETokenType.EOL))
             {
-                Error("Found "+ _lookAhead.Type.ToString() +" Expected CE or EOL");
+                Error("Found "+ _lookAhead.Type.ToString() +" certo");
             }
             return left;
         }
-
         public Double Term() //term   : factZ
         {
             var f = Fact();
@@ -135,7 +145,7 @@ namespace VerySimpleInterpreter.Parser
                 var right = Term();
                 return left / right;
             }
-            else if (!TestFollow(ETokenType.CE, ETokenType.EOL))
+            if (!TestFollow(ETokenType.CE, ETokenType.EOL))
             {
                 Error("Found "+ _lookAhead.Type.ToString() +" Expected CE or EOL");
             }
