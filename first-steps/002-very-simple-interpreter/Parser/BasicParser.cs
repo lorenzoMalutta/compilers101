@@ -145,6 +145,10 @@ namespace VerySimpleInterpreter.Parser
                 var right = Term();
                 return left / right;
             }
+            else if (_lookAhead.Type == ETokenType.SUM || _lookAhead.Type == ETokenType.SUB)
+            {
+                return left;
+            }
             if (!TestFollow(ETokenType.CE, ETokenType.EOL))
             {
                 Error("Found "+ _lookAhead.Type.ToString() +" Expected CE or EOL");
